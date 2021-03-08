@@ -1,9 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Win32;
+
 namespace tosspc
 {
     internal class Program
@@ -23,24 +27,31 @@ namespace tosspc
         static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
         public static void Main(string[] args)
         {
-            string path =
-                @"steam://rungameid/1175730";
+            string tospath =
+                @"C:\Program Files (x86)\Steam\steamapps\common\Tree of Savior (Japanese Ver.)\release\patch\tos.exe";
             if (args.Length > 0)
             {
-                path = args[0];
+                tospath = args[0];
             }
-            ProcessStartInfo psi = new ProcessStartInfo()
+            // string steampath = (String)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Valve\Steam","SteamExe",null);
+            // Console.WriteLine("Tos Auto 64bit Launcher by ebisuke");
+            // Console.WriteLine("この画面は正常に起動後自動で閉じられます");
+            //
+            // ProcessStartInfo psi = new ProcessStartInfo()
+            // {
+            //     FileName = steampath,
+            //     Arguments = "-silent"
+            // };
+            // Process.Start(psi).WaitForInputIdle();
+            //
+        
+            ProcessStartInfo psitos = new ProcessStartInfo()
             {
-                FileName = path,
-
+                FileName = tospath,
             };
-            Console.WriteLine("Tos Auto 64bit Launcher by ebisuke");
-            Console.WriteLine("この画面は正常に起動後自動で閉じられます");
-
-            Process tos = Process.Start(psi);
-            while (!tos.HasExited)
-            {
-                
+            Process tos = Process.Start(psitos);
+            
+            while(!tos.HasExited){
                 IntPtr hnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, "TreeOfSavior");
                 if (hnd != IntPtr.Zero)
                 {
